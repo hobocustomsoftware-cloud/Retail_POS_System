@@ -2,80 +2,112 @@
 
 ## Goal
 Build a POS system for retail shops (clothing/apparel, car parts/accessories, electronics, grocery/hardware/building materials etc.) with support for:
-- Product variants (color, size)
-- SKU/Barcode
-- Stock/Inventory
+- Product variants (color, size, gender/category attributes)
+- SKU/Barcode (auto-generate if not provided)
+- Serial numbers + Warranty (electronics/machinery)
+- Stock/Inventory (branch-wise)
 - Pricing (retail/wholesale)
 - Customers, Suppliers
 - Purchases/GRN
-- Sales (Invoice/Receipt)
+- Sales (Invoice/Receipt) with barcode scanning
 - Returns/Exchanges
 - Discounts/Promotions
 - Multi-branch/Store support
 - Users/Roles/PIN
-- KDS not needed (retail) - focus on Sales/Purchase/Stock
+- Multi-tenancy (SaaS) + Standalone (license key)
 
-Deployment models:
-- **Standalone (dedicated)**: Single business/store, licensed via license key
-- **Multi-tenancy (SaaS)**: Hosted multi-tenant, subscription-based
+## Tech Stack
+- **Backend**: Django REST Framework + Channels (WebSocket)
+- **Web**: React + Vite
+- **Mobile**: React Native + Expo
+- **Desktop**: Electron
+- **DB**: PostgreSQL (primary), SQLite for simple standalone
+- **Infra**: Docker, Turborepo monorepo
 
-## Targets
-Web app, Mobile app, Desktop (Electron), tablets/POS terminals
+## Deployment Models
+- **Standalone (dedicated)**: Single business, license key activation (online/offline hybrid), self-hostable via Docker or installer
+- **Multi-tenancy (SaaS)**: Hosted multi-tenant, subscription-based, row-level tenant isolation (`tenant_id`)
 
-## Known context
-- Repo: /workspace/app (empty/scaffold exists)
-- Tech direction: Django REST Framework + React (Vite) + React Native (Expo) + Electron
-- Docker support planned
+## Core Models (draft)
 
-## Decisions to confirm (one by one)
+### Tenancy/Licensing
+- `Tenant` (multi-tenant)
+- `License` (standalone: key, machine_id, activated_at, expires_at, status)
+- `Branch/Store` (multi-branch)
 
-### 1) Product Variants
-**Q:** Variants by attributes (color/size) with individual SKU per variant, or matrix?  
-**Recommended:** Attribute-based (Product + ProductVariant with attribute values, SKU, price, stock). Support multiple attributes.
+### Products/Inventory
+- `Category`, `Brand`, `Supplier`, `Unit` (pcs/kg/meter)
+- `Product` (base product, type, warranty config, has_variants)
+- `Attribute`, `AttributeValue` (e.g. Color: Red/White/Black, Size: S/M/L/XL/XXL/XXXL, Gender: Men/Women/Kids)
+- `ProductVariant` (product + attribute values, SKU, barcode auto-generated, price, cost, track_serial/warranty)
+- `Stock` (branch + variant, qty, min_qty)
+- `SerialNumber` (sold items, warranty tracking)
 
-### 2) Barcode/Scanning
-**Q:** Need barcode scanner support (USB/Bluetooth) for POS?  
-**Recommended:** Support keyboard wedge + camera scanner; generate barcodes if needed.
+### Sales
+- `Customer` (with credit/debt)
+- `Sale/Invoice` (branch, customer, user, items, payments, discounts, tax)
+- `SaleItem` (variant/product, qty, price, serials)
+- `Payment` (cash/card/mobile/split/credit)
+- `Hold/Suspend`
 
-### 3) Inventory Tracking
-**Q:** Track stock by branch/store? Real-time stock deduction on sale? Allow negative stock?  
-**Recommended:** Branch-wise stock (Warehouse/Store), deduct on completed sale, prevent negative or allow with permission.
+### Purchases/Returns/Warranty
+- `PurchaseOrder`, `GoodsReceivedNote` (GRN)
+- `PurchaseItem`
+- `SalesReturn`, `SalesReturnItem`
+- `WarrantyClaim` (serial, customer, issue, status, resolution)
 
-### 4) Pricing
-**Q:** Single price or multiple price lists (retail/wholesale)?  
-**Recommended:** Base price + optional price lists per customer group.
+### Users/Auth
+- `User` (role, pin, branch, tenant)
+- Roles: ADMIN, MANAGER, CASHIER, SALES, STOCK_KEEPER
 
-### 5) Sales Flow
-**Q:** Walk-in, customer selection, hold/suspend sale, layaway?  
-**Recommended:** Walk-in default, customer optional, hold/resume, quick sale.
+## Key Features
+- **Variants matrix**: Attribute-based variants (clothing sizes/colors/gender, flexible)
+- **Barcode**: Auto-generate internal barcode/SKU if missing; keyboard wedge + camera scanner support
+- **Warranty**: Product warranty config + serial tracking per sold item + warranty claims
+- **Branch-wise stock**: Per branch/warehouse, real-time deduction on sale completion
+- **Multi-payment**: Cash/Card/Mobile Money/Split/Credit
+- **Purchases**: PO → GRN, update stock/cost
+- **Returns/Exchanges**: By invoice, restock or damaged
+- **License**: Standalone license key check/activation (hybrid online/offline)
 
-### 6) Payments
-**Q:** Cash, Card, Mobile Money, Split payment, Credit (on account)?  
-**Recommended:** Multiple payment methods, split, customer credit/debt.
+## Implementation Plan
 
-### 7) Purchases/GRN
-**Q:** Supplier, PO, Goods Received Note, purchase price, update stock/cost?  
-**Recommended:** PO → GRN → update stock and average cost.
+### Phase 1: Backend Core (Django)
+1. Setup apps: `tenants`, `licensing`, `core`, `products`, `inventory`, `sales`, `purchases`, `customers`, `suppliers`, `warranty`, `accounts`
+2. Models + migrations for all entities above
+3. Multi-tenancy middleware (row-level by tenant_id) + standalone mode detection
+4. License middleware/API (machine ID, activation)
+5. RBAC + PIN auth
+6. REST APIs (ViewSets) + permissions
+7. Barcode auto-generation utility
+8. Serial/warranty logic
 
-### 8) Returns
-**Q:** Sales return/refund, exchange, return to stock or damaged?  
-**Recommended:** Return by invoice, restock to branch or mark damaged.
+### Phase 2: Real-time & POS APIs
+1. Channels setup for stock updates (optional)
+2. Sale completion logic (stock deduction, serial assignment)
+3. Barcode lookup endpoint
 
-### 9) Multi-branch
-**Q:** Single branch or multi-branch from start? Transfer stock between branches?  
-**Recommended:** Support branch/store model (user assigned to branch, can switch if permitted).
+### Phase 3: Web (React + Vite)
+1. POS Screen (barcode scan, cart, variants, customer, payments)
+2. Products/Variants management
+3. Inventory/Stock by branch
+4. Purchases/GRN
+5. Sales history/Returns
+6. Warranty claims
+7. Users/Roles/Branches
+8. License activation (standalone)
+9. Settings/Tax/Discounts
 
-### 10) Tax/Discount
-**Q:** Tax per item or invoice? Discount %/amount, by item/invoice?  
-**Recommended:** Configurable tax, line/item and invoice discounts.
+### Phase 4: Mobile (Expo) + Desktop (Electron)
+1. Mobile: POS/quick sale, stock lookup
+2. Desktop: Electron wrapper + printer config (ESC/POS)
 
-### 11) Categories/Brands/Suppliers
-**Q:** Need brands, suppliers, units (pcs/kg/meter)?  
-**Recommended:** Yes - Category, Brand, Supplier, Unit of Measure.
+### Phase 5: Docker & Docs
+1. Dockerfiles + docker-compose for standalone (backend/web/db/redis)
+2. `.env.example`
+3. Migration/seed scripts
+4. Docs: setup, licensing, multi-tenancy
 
-### 12) Users/Roles
-**Q:** Roles (Admin, Manager, Cashier/Sales, Stock Keeper)? PIN login for POS?  
-**Recommended:** RBAC + PIN for speed.
+## Next Step
+Switch to implementation agent to build backend models/migrations first.
 
-## Next step
-Start with Q1 (Product Variants model) - confirm approach.

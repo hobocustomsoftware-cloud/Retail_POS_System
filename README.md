@@ -1,23 +1,19 @@
-# POS System
+# Retail POS
 
-Restaurant Bar POS (Kitchen & BBQ) - Web, Mobile, Desktop (Electron), tablets/POS terminals.
+Multi-tenant (SaaS) + Standalone (license key) Retail POS for clothing, electronics, hardware, parts etc.
 
-## Deployment Models
+## Features
+- Product variants (color/size/gender) with SKU/Barcode auto-generate
+- Serial numbers & Warranty for electronics/machinery
+- Branch-wise inventory, purchases/GRN
+- POS sales, payments (cash/card/split/credit), returns
+- Barcode scanning support
+- Users/Roles/PIN, Customers/Suppliers
+- Docker standalone deployment
 
-- **Standalone (Dedicated)**: Single business, license key activation. Distributable via Docker or installer.
-- **Multi-Tenancy (SaaS)**: Hosted multi-tenant with subscription model.
-
-## Quick Start (Development)
-
+## Quick Start
 ```bash
 npm install
 npm run dev
 ```
-
-## Standalone (Docker)
-
-```bash
-npm run docker:standalone
-```
-
-See `docs/standalone.md`, `docs/licensing.md`, `docs/multi-tenancy.md` for details.
+Docker: `npm run docker:standalone`

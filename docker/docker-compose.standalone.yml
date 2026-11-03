@@ -4,7 +4,7 @@ services:
   db:
     image: postgres:16
     environment:
-      POSTGRES_DB: pos
+      POSTGRES_DB: retail_pos
       POSTGRES_USER: pos
       POSTGRES_PASSWORD: pos
     volumes:
@@ -19,16 +19,16 @@ services:
 
   backend:
     build: ../apps/backend
-    command: daphne -b 0.0.0.0 -p 8000 core.asgi:application
+    command: sh -c "python manage.py migrate && daphne -b 0.0.0.0 -p 8000 config.asgi:application"
     volumes:
       - ../apps/backend:/app
     ports:
       - "8000:8000"
     environment:
       - DEBUG=True
-      - DATABASE_URL=postgres://pos:pos@db:5432/pos
       - DEPLOYMENT_MODE=STANDALONE
-      - LICENSE_KEY=POS-DEV-KEY-1234
+      - LICENSE_KEY=POS-STANDALONE-KEY
+      - DATABASE_URL=postgres://pos:pos@db:5432/retail_pos
     depends_on:
       - db
       - redis
