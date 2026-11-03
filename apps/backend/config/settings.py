@@ -74,3 +74,13 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = 'accounts.User'
 DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE', 'STANDALONE')
 LICENSE_KEY = os.environ.get('LICENSE_KEY', '')
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 50,
+    'DEFAULT_FILTER_BACKENDS': ['rest_framework.filters.SearchFilter', 'rest_framework.filters.OrderingFilter'],
+}

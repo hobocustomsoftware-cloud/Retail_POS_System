@@ -16,7 +16,9 @@
     "productName": "Retail POS - HoBo Custom Software",
     "copyright": "Copyright © 2026-present HoBo Custom Software",
     "win": {
-      "target": ["nsis"],
+      "target": [
+        "nsis"
+      ],
       "icon": "icon.ico"
     },
     "nsis": {
@@ -29,5 +31,10 @@
       "main.js",
       "package.json"
     ]
-  }
+  },
+  "files": [
+    "main.js",
+    "preload.js",
+    "package.json"
+  ]
 }

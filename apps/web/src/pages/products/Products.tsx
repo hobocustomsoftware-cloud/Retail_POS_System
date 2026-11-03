@@ -58,3 +58,10 @@ export default function Products() {
     </div>
   )
 }
+import DataTable from '../../components/DataTable'
+
+export default function Products() {
+  // ... existing code simplified
+  const columns = [{key:'name',label:'Name'},{key:'code',label:'Code'}]
+  return <div style={{padding:'1rem'}}><h1>Products & Variants</h1><DataTable columns={columns} data={[]} /></div>
+}
