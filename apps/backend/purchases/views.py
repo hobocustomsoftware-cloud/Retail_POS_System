@@ -4,7 +4,6 @@ from rest_framework.response import Response
 from django.db import transaction
 from .models import PurchaseOrder, GoodsReceivedNote, PurchaseItem
 from inventory.models import Stock
-from products.models import ProductVariant
 
 class GRNViewSet(viewsets.ModelViewSet):
     queryset = GoodsReceivedNote.objects.all()
@@ -22,6 +21,6 @@ class GRNViewSet(viewsets.ModelViewSet):
                     )
                     stock.quantity += item.quantity
                     stock.save()
-                return Response({'status': 'received'})
+                return Response({'status': 'received', 'grn_no': grn.grn_no})
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

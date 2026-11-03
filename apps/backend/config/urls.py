@@ -1,11 +1,16 @@
+from django.contrib import admin
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from sales.views import SaleViewSet, PaymentViewSet
-
-router = DefaultRouter()
-router.register(r'sales', SaleViewSet)
-router.register(r'payments', PaymentViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('admin/', admin.site.urls),
+    path('api/licensing/', include('licensing.urls')),
+    path('api/products/', include('products.urls')),
+    path('api/sales/', include('sales.urls')),
+    path('api/purchases/', include('purchases.urls')),
+    path('api/warranty/', include('warranty.urls')),
+    path('api/inventory/', include('inventory.urls')),
+    path('api/customers/', include('customers.urls')),
+    path('api/suppliers/', include('suppliers.urls')),
+    path('api/branches/', include('branches.urls')),
+    path('api/accounts/', include('accounts.urls')),
 ]
