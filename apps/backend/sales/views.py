@@ -110,3 +110,23 @@ class SaleViewSet(viewsets.ModelViewSet):
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
+
+    @action(detail=False, methods=['post'])
+    def complete_return(self, request):
+        invoice_no = request.data.get('invoice_no')
+        items = request.data.get('items', [])
+        try:
+            with transaction.atomic():
+                sale = Sale.objects.get(invoice_no=invoice_no)
+                for it in items:
+                    variant_id = it.get('variant')
+                    qty = int(it.get('quantity', 0))
+                    restock = it.get('restock', True)
+                    if restock:
+                        stock = Stock.objects.filter(branch=sale.branch, variant_id=variant_id).first()
+                        if stock:
+                            stock.quantity += qty
+                            stock.save()
+                return Response({'status': 'returned'})
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)

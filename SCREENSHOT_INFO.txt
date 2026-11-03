@@ -1,0 +1,6 @@
+Retail POS System - Completed
+- Backend: Django REST + Channels, 11 apps, all migrations, sales/GRN/returns/warranty APIs
+- Web: POS terminal, Products/Variants (matrix), Sales History/Returns, Purchases/GRN, Inventory, Warranty, Master Data (Customers/Suppliers/Categories/Brands/Units/Branches/Users), Settings/License
+- Mobile: PIN login + scanner scaffold
+- Desktop: Electron wrapper
+- Docker: docker-compose.standalone.yml (migrate + seed)
