@@ -130,3 +130,77 @@ class PaymentViewSet(viewsets.ModelViewSet):
                 return Response({'status': 'returned'})
         except Exception as e:
             return Response({'error': str(e)}, status=400)
+
+    @action(detail=False, methods=['post'])
+    def wallet_payment(self, request):
+        data = request.data
+        try:
+            with transaction.atomic():
+                branch_id = data.get('branch')
+                invoice_no = f"INV-{datetime.now().strftime('%Y%m%d')}-{Sale.objects.filter(branch_id=branch_id).count()+1:05d}"
+                sale = Sale.objects.create(
+                    branch_id=branch_id,
+                    invoice_no=invoice_no,
+                    customer_id=data.get('customer'),
+                    user=request.user if request.user.is_authenticated else None,
+                    status='PENDING_VERIFICATION',
+                    payment_status='PENDING_VERIFICATION',
+                    subtotal=data.get('subtotal', 0),
+                    discount=data.get('discount', 0),
+                    tax=data.get('tax', 0),
+                    total=data.get('total', 0),
+                    paid_amount=0,
+                )
+                for item in data.get('items', []):
+                    SaleItem.objects.create(
+                        sale=sale,
+                        variant_id=item.get('variant'),
+                        quantity=item.get('quantity', 1),
+                        price=item.get('price', 0),
+                        discount=item.get('discount', 0),
+                        total=item.get('total', 0),
+                    )
+                Payment.objects.create(
+                    sale=sale,
+                    method=data.get('method'),
+                    amount=data.get('total', 0),
+                    reference_no=data.get('reference_no', ''),
+                    verification_status='PENDING',
+                    proof_image=data.get('proof_image'),
+                )
+                return Response({'invoice_no': sale.invoice_no, 'status': 'PENDING_VERIFICATION', 'message': 'Waiting for cashier verification'}, status=201)
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)
+
+    @action(detail=True, methods=['post'])
+    def verify_payment(self, request, pk=None):
+        sale = self.get_object()
+        action_type = request.data.get('action')
+        try:
+            with transaction.atomic():
+                payment = sale.payments.first()
+                if action_type == 'approve':
+                    payment.verification_status = 'VERIFIED'
+                    payment.verified_by = request.user if request.user.is_authenticated else None
+                    payment.verified_at = timezone.now()
+                    payment.save()
+                    sale.payment_status = 'VERIFIED'
+                    sale.status = 'COMPLETED'
+                    sale.paid_amount = sale.total
+                    sale.save()
+                    for item in sale.items.all():
+                        stock = Stock.objects.filter(branch=sale.branch, variant=item.variant).first()
+                        if stock:
+                            stock.quantity -= item.quantity
+                            stock.save()
+                    return Response({'status': 'approved'})
+                else:
+                    payment.verification_status = 'REJECTED'
+                    payment.notes = request.data.get('notes', '')
+                    payment.save()
+                    sale.payment_status = 'REJECTED'
+                    sale.status = 'CANCELLED'
+                    sale.save()
+                    return Response({'status': 'rejected'})
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)
