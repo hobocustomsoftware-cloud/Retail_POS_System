@@ -70,3 +70,14 @@ No part of this software may be reproduced without written permission from HoBo 
 - **Owner Registration**: Owner များက **Gmail ဖြင့်သာ** ဝင်ရောက်ခွင့်ရှိပါသည်။ Reset Password မလိုအပ်ပါ။
 - **Shop Info**: ဆိုင်အမည်၊ လိပ်စာအပြည့်အစုံ၊ ဖုန်းနံပါတ်၊ အီးမေးလ် စသည်တို့ကို အပြည့်အစုံ ထည့်သွင်းရမည်။
 - **Subscription Plans**: Billing > Plans မှတဆင့် ကြည့်ရှုနိုင်ပြီး Manual Payment (KPay/AYA Pay/CB Pay Screenshot) ဖြင့် ပေးဆောင်နိုင်ပါသည်။
+
+## Theme & Branding
+- **Primary Color:** `#aa0000` (Red)
+- **Secondary Color:** `#151515` (Black)
+- **Font:** `Myanmar Thuriya`
+- **Logo:** Upload per shop allowed. Organization-wide custom domain/subdomain available as Add-on.
+
+## Trial Policy
+- **New Shop:** 7 days Free Trial
+- **After Trial:** View Only mode until subscription/payment approved
+- **Subscription:** Pay via Manual Verification (Screenshot only) for KPay/AYA Pay/CB Pay

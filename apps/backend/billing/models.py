@@ -40,3 +40,10 @@ class SubscriptionPlan(models.Model):
     price = models.DecimalField(max_digits=12, decimal_places=2)
     is_active = models.BooleanField(default=True)
     description = models.TextField(blank=True)
+
+class Addon(models.Model):
+    name = models.CharField(max_length=100)
+    code = models.CharField(max_length=50, unique=True)
+    price = models.DecimalField(max_digits=12, decimal_places=2)
+    description = models.TextField(blank=True)
+    is_active = models.BooleanField(default=True)

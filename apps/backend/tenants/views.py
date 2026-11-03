@@ -13,3 +13,9 @@ class ShopViewSet(viewsets.ModelViewSet):
         shop.trial_end = timezone.now() + timedelta(days=7)
         shop.subscription_status = 'TRIAL'
         shop.save()
+from .models import DomainRequest
+from .serializers import DomainRequestSerializer
+
+class DomainRequestViewSet(viewsets.ModelViewSet):
+    queryset = DomainRequest.objects.all()
+    serializer_class = DomainRequestSerializer

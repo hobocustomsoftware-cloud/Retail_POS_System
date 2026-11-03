@@ -1,0 +1,40 @@
+@font-face {
+  font-family: 'Myanmar Thuriya';
+  src: local('Myanmar Thuriya'), local('MyanmarThuriya');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  --color-primary: #aa0000;
+  --color-secondary: #151515;
+  --color-background: #f9fafb;
+  --color-white: #ffffff;
+  --color-text: #151515;
+  --color-text-light: #6b7280;
+}
+
+body {
+  font-family: 'Myanmar Thuriya', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--color-background);
+  color: var(--color-text);
+  margin: 0;
+}
+
+button.primary {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: 0.5rem 1rem;
+  font-family: 'Myanmar Thuriya', system-ui, sans-serif;
+}
+
+.sidebar {
+  background: var(--color-secondary);
+  color: var(--color-white);
+}
+
+.header {
+  background: var(--color-primary);
+  color: var(--color-white);
+}

@@ -26,3 +26,12 @@ class Shop(models.Model):
 
     def __str__(self):
         return self.shop_name
+
+class DomainRequest(models.Model):
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    requested_domain = models.CharField(max_length=255)
+    type = models.CharField(max_length=20, default='CUSTOM_DOMAIN')  # CUSTOM_DOMAIN/SUBDOMAIN
+    status = models.CharField(max_length=20, default='PENDING')  # PENDING/APPROVED/REJECTED
+    requested_at = models.DateTimeField(auto_now_add=True)
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    notes = models.TextField(blank=True)

@@ -5,3 +5,9 @@ class ShopSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shop
         fields = '__all__'
+from .models import DomainRequest
+
+class DomainRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DomainRequest
+        fields = '__all__'

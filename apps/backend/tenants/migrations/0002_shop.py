@@ -23,3 +23,17 @@ class Migration(migrations.Migration):
             ],
         ),
     ]
+
+        migrations.CreateModel(
+            name='DomainRequest',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('requested_domain', models.CharField(max_length=255)),
+                ('type', models.CharField(default='CUSTOM_DOMAIN', max_length=20)),
+                ('status', models.CharField(default='PENDING', max_length=20)),
+                ('requested_at', models.DateTimeField(auto_now_add=True)),
+                ('reviewed_at', models.DateTimeField(blank=True, null=True)),
+                ('notes', models.TextField(blank=True)),
+                ('shop', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='tenants.shop')),
+            ],
+        ),

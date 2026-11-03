@@ -8,3 +8,4 @@ router.register(r'shops', ShopViewSet)
 urlpatterns = [
     path('', include(router.urls)),
 ]
+router.register(r'domains', DomainRequestViewSet)
