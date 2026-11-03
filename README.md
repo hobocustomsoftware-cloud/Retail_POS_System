@@ -1,5 +1,8 @@
 # Retail POS
 
+**Developed by HoBo Custom Software**  
+**Copyright © 2026 HoBo Custom Software. All Rights Reserved.**
+
 Multi-tenant (SaaS) + Standalone (Dedicated/License Key) Retail POS for clothing, electronics, hardware, parts shops.
 
 ## Features
@@ -34,3 +37,20 @@ Optimized for server deployment with tenant isolation. DB on 5433, Redis on 6380
 
 ## Default Credentials
 - Admin: username `admin`, PIN `1234`
+
+## Team & Conduction
+- **Owner/Developer:** HoBo Custom Software
+- **Project Type:** Custom Retail POS Solution
+- **Development Team:** HoBo Custom Software Development Team
+- **Conduction:** This software is developed and maintained by HoBo Custom Software. Use is subject to the terms and conditions outlined herein.
+
+## Privacy Policy
+- **Data Collection:** All business data (products, sales, customers, inventory) remains under the control of the licensee/tenant.
+- **Data Storage:** For Standalone deployments, data is stored locally on the customer's server/database. For SaaS Multi-tenant deployments, data is stored securely with tenant-level isolation.
+- **Data Security:** Access control via role-based permissions and PIN authentication.
+- **No Third-Party Sharing:** Customer data is not shared with third parties without explicit consent.
+- **License Compliance:** Standalone usage requires valid license key issued by HoBo Custom Software.
+
+## License & Copyright
+**All rights reserved.** This software and its documentation are the intellectual property of **HoBo Custom Software**.  
+Unauthorized copying, modification, distribution, or commercial use without written permission from HoBo Custom Software is strictly prohibited.
