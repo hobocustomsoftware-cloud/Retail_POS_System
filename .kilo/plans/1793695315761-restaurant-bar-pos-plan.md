@@ -3,6 +3,10 @@
 ## Goal
 Build a POS system for restaurant/bar with Kitchen & BBQ operations. Targets: Web app, Mobile app, Desktop (Electron), tablets/POS terminals.
 
+Deployment models:
+- **Standalone (dedicated)**: Single business deployment, licensed via license key. One-time purchase/license to "produce" for that business.
+- **Multi-tenancy (SaaS)**: Hosted multi-tenant, subscription-based.
+
 ## Known context
 - Repo: /workspace/app (empty except README.md)
 - Use case: restaurant bar, Kitchen & BBQ
@@ -14,49 +18,73 @@ Build a POS system for restaurant/bar with Kitchen & BBQ operations. Targets: We
 **Q:** Monorepo (shared types/API/UI) vs separate apps?  
 **Recommended:** Monorepo (e.g., Turborepo) with shared packages (types, utils, API contracts). Easier to share logic across web/mobile/desktop/Electron.
 
-### 2) Tech stack
+### 2) Delivery/distribution for Standalone (dedicated)
+**Q:** For standalone "produce once" - how to distribute? Options:
+- **Docker image** (self-hostable): Customer runs `docker compose up`. License checked at startup/runtime. Easy to update via new image.
+- **Installer** (Electron/desktop app with bundled server): One installer (Windows/Mac/Linux), includes local server + DB. Simpler for non-technical.
+- **Source/code delivery** restricted (not recommended).
+- **Binary/package + license activation**.
+
+**Recommended:** Support both paths? Or pick one to start. Docker is cleaner for multi-device on LAN (server on PC/router + tablets). Installer better for single-PC "all-in-one".
+
+Which is preferred as primary for standalone?
+
+### 3) License key model (standalone)
+**Q:** License enforcement - online activation required? Or offline activation (generate key tied to hardware/machine ID)?  
+**Recommended:** Hybrid - online first, allow offline grace/activation via generated request code. Need to prevent easy copying; consider machine binding (CPU/OS/hw id) with grace period. Also need "license check" service or embedded validation.
+
+How strict should enforcement be (online mandatory vs offline-allowed)?
+
+### 4) Multi-tenancy model
+**Q:** Shared DB with tenant_id on all tables vs schema-per-tenant vs DB-per-tenant?  
+**Recommended:** Shared DB + `tenant_id` (row-level) is simpler for SaaS; need strong isolation + indexes. Schema-per-tenant cleaner isolation but harder to migrate. DB-per-tenant most isolated but operationally heavy.
+
+Which approach?
+
+### 5) Tech stack
 **Q:** Preferred stack?  
 **Recommended:** TypeScript end-to-end. Options:
-- **Fullstack TS**: Next.js (web) + Expo/React Native (mobile) + Tauri/Electron (desktop) sharing packages, backend via Next.js API routes or separate Node.js (Fastify/Express/Nest). 
-- Or **Flutter** for all (web/mobile/desktop) + backend.
+- **Fullstack TS**: Next.js (web) + Expo/React Native (mobile) + Electron (desktop) sharing packages, backend via Next.js API routes or separate Node.js (Fastify/Nest) with WebSocket. Can serve web + API from same app.
+- Or **Tauri** (Rust) for desktop+smaller bundle.
+- Or **Flutter** for cross-platform.
 
-Need user preference.
+Need preference.
 
-### 3) Backend / DB
-**Q:** Self-hosted/local first or cloud? Need multi-device sync?  
-**Recommended:** Start with Node.js + Prisma + PostgreSQL (or SQLite for single-terminal/offline-first). For multi-terminal (kitchen/cashier/bar) need real-time sync (WebSocket).
+### 6) Backend / DB
+**Q:** Standalone needs embedded/local DB? Multi-tenant needs central DB?  
+**Recommended:** 
+- Standalone (dedicated): SQLite (file-based) embedded in app/Docker volume, or PostgreSQL in docker-compose. SQLite simpler for all-in-one; Postgres better if multiple devices hit same server.
+- Multi-tenant: PostgreSQL (central).
 
-### 4) Roles & auth
-**Q:** Roles needed? (cashier, waiter/server, bartender, kitchen/chef, BBQ/grill, admin/manager)? PIN login or accounts?  
-**Recommended:** Role-based access control, PIN login for speed on POS terminals.
+Also need real-time sync (WebSocket/Socket.io) for multi-terminal.
 
-### 5) Ordering flow
-**Q:** Table service (dine-in with table/floor), takeout, delivery? Bar tab?  
-**Recommended:** Support dine-in (tables/floors/sections), takeout, bar tabs.
+### 7) Roles & auth
+**Q:** Roles needed? PIN login for POS terminals?  
+**Recommended:** RBAC, PIN quick login, sessions/tokens. For multi-tenant need tenant-scoped auth.
 
-### 6) Kitchen/BBQ workflow
-**Q:** Single KDS or separate displays (Kitchen + BBQ/Grill)? Need routing by station/category? Course firing, fire times, hold/fire all, bump orders?  
-**Recommended:** Station-based routing (items go to kitchen/BBQ/bar based on category/station), separate KDS per station with timers/colors.
+### 8) Ordering flow
+**Q:** Dine-in (tables/floors/sections), takeout, delivery? Bar tabs?  
+**Recommended:** All common for restaurant/bar.
 
-### 7) Menu/modifiers
-**Q:** Modifiers, add-ons, variants, combos, cooking instructions (rare/medium/well), BBQ weight/options?  
-**Recommended:** Modifiers with required/optional, price adjustments, notes per item.
+### 9) Kitchen/BBQ workflow
+**Q:** Single KDS or separate (Kitchen + BBQ/Grill + Bar)? Station routing by category? Course firing, timers, bump?  
+**Recommended:** Station-based routing, separate KDS per station.
 
-### 8) Payments
-**Q:** Methods (cash, card, split bill, split items, discount %, discount amount, tax/VAT, service charge)?  
-**Recommended:** Flexible payment with splits/combinations.
+### 10) Menu/modifiers
+**Q:** Modifiers, add-ons, variants, combos, cooking temp (rare/med/well), BBQ options/weight?  
+**Recommended:** Flexible modifier system.
 
-### 9) Printing
-**Q:** Thermal receipt printer (ESC/POS), kitchen ticket printers per station, cash drawer, barcode?  
-**Recommended:** ESC/POS support, printer routing by station.
+### 11) Payments
+**Q:** Cash, card, split bill/items, discounts, tax/VAT, service charge?  
+**Recommended:** Full payment flexibility.
 
-### 10) Offline / real-time
-**Q:** Must work offline if network drops or always online?  
-**Recommended:** For multi-terminal real-time sync preferred; consider offline queue for orders/payments.
+### 12) Printing
+**Q:** ESC/POS thermal printers per station, receipt printer, cash drawer?  
+**Recommended:** Printer routing by station/category.
 
-### 11) UI/UX priorities
-**Q:** Touch-first for tablets/POS, or also mouse/keyboard? Speed critical?  
-**Recommended:** Touch-optimized, large buttons, minimal taps.
+### 13) Offline / real-time
+**Q:** Multi-terminal needs real-time; standalone should work on LAN. Offline resilience?  
+**Recommended:** WebSocket for live updates; consider offline queue if needed.
 
 ## Next step
-Start with Q1 (monorepo architecture) - get answer before deciding stack details.
+Q2 most urgent given standalone+license requirement - Docker vs installer as primary distribution? And do you want to support both from start?
