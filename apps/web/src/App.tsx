@@ -37,6 +37,8 @@ const router = createBrowserRouter([
       { path: 'branches', element: <Branches /> },
       { path: 'users', element: <Users /> },
       { path: 'settings', element: <Settings /> },
+      { path: 'legal/terms', element: <Terms /> },
+      { path: 'legal/privacy', element: <Privacy /> },
     ],
   },
 ])
@@ -60,3 +62,5 @@ function App() {
 }
 
 export default App
+import Terms from './pages/legal/Terms'
+import Privacy from './pages/legal/Privacy'
