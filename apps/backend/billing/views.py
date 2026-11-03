@@ -46,3 +46,9 @@ class ManualPaymentProofViewSet(viewsets.ModelViewSet):
         proof.invoice.status = 'REJECTED'
         proof.invoice.save()
         return Response({'status': 'rejected'})
+from .models import SubscriptionPlan
+from .serializers import SubscriptionPlanSerializer
+
+class SubscriptionPlanViewSet(viewsets.ModelViewSet):
+    queryset = SubscriptionPlan.objects.all()
+    serializer_class = SubscriptionPlanSerializer

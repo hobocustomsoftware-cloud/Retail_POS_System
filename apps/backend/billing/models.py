@@ -7,6 +7,7 @@ class BillingInvoice(models.Model):
     
     invoice_no = models.CharField(max_length=50, unique=True)
     tenant = models.ForeignKey('tenants.Tenant', null=True, blank=True, on_delete=models.SET_NULL)
+    shop = models.ForeignKey('tenants.Shop', null=True, blank=True, on_delete=models.SET_NULL)
     type = models.CharField(max_length=20, choices=TYPE_CHOICES)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     currency = models.CharField(max_length=10, default='MMK')
@@ -32,3 +33,10 @@ class ManualPaymentProof(models.Model):
     reviewed_at = models.DateTimeField(null=True, blank=True)
     admin_note = models.TextField(blank=True)
     submitted_at = models.DateTimeField(auto_now_add=True)
+
+class SubscriptionPlan(models.Model):
+    name = models.CharField(max_length=100)
+    duration_days = models.IntegerField(default=30)
+    price = models.DecimalField(max_digits=12, decimal_places=2)
+    is_active = models.BooleanField(default=True)
+    description = models.TextField(blank=True)

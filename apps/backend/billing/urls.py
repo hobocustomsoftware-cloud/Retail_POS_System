@@ -9,3 +9,4 @@ router.register(r'proofs', ManualPaymentProofViewSet)
 urlpatterns = [
     path('', include(router.urls)),
 ]
+router.register(r'plans', SubscriptionPlanViewSet)

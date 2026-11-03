@@ -10,3 +10,9 @@ class ManualPaymentProofSerializer(serializers.ModelSerializer):
     class Meta:
         model = ManualPaymentProof
         fields = '__all__'
+from .models import SubscriptionPlan
+
+class SubscriptionPlanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubscriptionPlan
+        fields = '__all__'

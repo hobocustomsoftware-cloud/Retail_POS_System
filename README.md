@@ -63,3 +63,10 @@ Unauthorized copying, modification, distribution, or commercial use without writ
 ## Copyright
 Copyright © 2026-present-present HoBo Custom Software. All Rights Reserved.  
 No part of this software may be reproduced without written permission from HoBo Custom Software.
+
+## Trial & Subscription
+- **Trial**: ဆိုင်အသစ်ဖွင့်ချိန်မှ စတင်၍ **၁လ (၃၀ရက်) သို့မဟုတ် ၇ရက် Trial** ပေးသုံးနိုင်ပါသည်။ လက်ရှိစနစ်မှာ **၇ ရက် Free Trial** သတ်မှတ်ထားပါသည်။
+- **After Trial**: Trial ကုန်ဆုံးပြီးနောက် **View Only** သာရှိမည်။ ဆက်လက်သုံးလိုပါက **Subscription Fee** ပေးဆောင်ရမည်။
+- **Owner Registration**: Owner များက **Gmail ဖြင့်သာ** ဝင်ရောက်ခွင့်ရှိပါသည်။ Reset Password မလိုအပ်ပါ။
+- **Shop Info**: ဆိုင်အမည်၊ လိပ်စာအပြည့်အစုံ၊ ဖုန်းနံပါတ်၊ အီးမေးလ် စသည်တို့ကို အပြည့်အစုံ ထည့်သွင်းရမည်။
+- **Subscription Plans**: Billing > Plans မှတဆင့် ကြည့်ရှုနိုင်ပြီး Manual Payment (KPay/AYA Pay/CB Pay Screenshot) ဖြင့် ပေးဆောင်နိုင်ပါသည်။
