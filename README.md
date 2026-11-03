@@ -81,3 +81,10 @@ No part of this software may be reproduced without written permission from HoBo 
 - **New Shop:** 7 days Free Trial
 - **After Trial:** View Only mode until subscription/payment approved
 - **Subscription:** Pay via Manual Verification (Screenshot only) for KPay/AYA Pay/CB Pay
+
+## Trial Period
+- **Duration:** 1 month + 7 days = 37 days (calendar-based)
+- **Calculation:** Add 1 calendar month from registration date + 7 additional days
+- **Example:** Registered on Jan 1 → trial ends Feb 7 (31 days Jan remaining logic) = 37 days total
+- **Leap/Short months:** Uses calendar month addition (e.g., Feb gives 28/29 days + 7 = 35/36 days total)
+- **After expiry:** Account becomes View Only until subscription is paid and approved

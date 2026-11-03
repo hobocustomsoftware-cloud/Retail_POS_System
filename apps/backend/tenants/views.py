@@ -19,3 +19,12 @@ from .serializers import DomainRequestSerializer
 class DomainRequestViewSet(viewsets.ModelViewSet):
     queryset = DomainRequest.objects.all()
     serializer_class = DomainRequestSerializer
+from dateutil.relativedelta import relativedelta
+from django.utils import timezone
+
+class ShopViewSet(ShopViewSet):
+    def perform_create(self, serializer):
+        shop = serializer.save(owner=self.request.user if self.request.user.is_authenticated else None)
+        shop.trial_end = timezone.now() + relativedelta(months=1) + timedelta(days=7)
+        shop.subscription_status = 'TRIAL'
+        shop.save()
