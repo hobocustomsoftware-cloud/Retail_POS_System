@@ -8,7 +8,6 @@ from .models import Sale, SaleItem, Payment
 from .serializers import SaleSerializer, SaleItemSerializer, PaymentSerializer
 from inventory.models import Stock
 from warranty.models import SerialNumber
-from utils.barcode import generate_barcode
 
 class SaleViewSet(viewsets.ModelViewSet):
     queryset = Sale.objects.all().order_by('-created_at')
@@ -20,7 +19,7 @@ class SaleViewSet(viewsets.ModelViewSet):
         try:
             with transaction.atomic():
                 branch_id = data.get('branch')
-                invoice_no = f"INV-{datetime.now().strftime('%Y%m%d')}-{Sale.objects.count()+1:05d}"
+                invoice_no = f"INV-{datetime.now().strftime('%Y%m%d')}-{Sale.objects.filter(branch_id=branch_id).count()+1:05d}"
                 sale = Sale.objects.create(
                     branch_id=branch_id,
                     invoice_no=invoice_no,
@@ -38,6 +37,9 @@ class SaleViewSet(viewsets.ModelViewSet):
                 for item in data.get('items', []):
                     variant_id = item.get('variant')
                     qty = int(item.get('quantity', 1))
+                    stock = Stock.objects.filter(branch_id=branch_id, variant_id=variant_id).first()
+                    if stock and stock.quantity < qty:
+                        return Response({'error': f'Insufficient stock for variant {variant_id}'}, status=400)
                     sale_item = SaleItem.objects.create(
                         sale=sale,
                         variant_id=variant_id,
@@ -46,12 +48,11 @@ class SaleViewSet(viewsets.ModelViewSet):
                         discount=item.get('discount', 0),
                         total=item.get('total', 0),
                     )
-                    stock = Stock.objects.filter(branch_id=branch_id, variant_id=variant_id).first()
                     if stock:
                         stock.quantity -= qty
                         stock.save()
                     for sn in item.get('serials', []):
-                        SerialNumber.objects.filter(serial=sn).update(is_sold=True, sold_at=timezone.now(), sale_item=sale_item)
+                        SerialNumber.objects.filter(serial=sn, is_sold=False).update(is_sold=True, sold_at=timezone.now(), sale_item=sale_item)
                 for pay in data.get('payments', []):
                     Payment.objects.create(
                         sale=sale,
@@ -88,6 +89,23 @@ class SaleViewSet(viewsets.ModelViewSet):
                 total=item.get('total', 0),
             )
         return Response(SaleSerializer(sale).data)
+
+    @action(detail=True, methods=['post'])
+    def resume(self, request, pk=None):
+        sale = self.get_object()
+        if sale.status == 'HOLD':
+            sale.status = 'PENDING'
+            sale.save()
+        return Response(SaleSerializer(sale).data)
+
+    @action(detail=False, methods=['post'])
+    def return_sale(self, request):
+        invoice_no = request.data.get('invoice_no')
+        try:
+            sale = Sale.objects.get(invoice_no=invoice_no)
+            return Response({'invoice_no': sale.invoice_no, 'items': SaleItemSerializer(sale.items.all(), many=True).data})
+        except Sale.DoesNotExist:
+            return Response({'error': 'Invoice not found'}, status=404)
 
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
