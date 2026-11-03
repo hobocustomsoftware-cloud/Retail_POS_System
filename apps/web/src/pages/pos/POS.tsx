@@ -92,26 +92,18 @@ export default function POS() {
         <div style={{ padding: '1rem', borderTop: '1px solid #e5e7eb' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', fontSize: '1.1rem' }}><span>Total</span><strong>{total.toFixed(2)}</strong></div>
           <button onClick={() => setShowPay(true)} disabled={cart.length === 0} style={{ width: '100%', padding: '0.75rem', background: '#059669', color: '#fff', border: 'none', borderRadius: '4px' }}>Payment</button>
+          <p style={{ fontSize:'0.75rem', color:'#6b7280', textAlign:'center', marginTop:'0.5rem' }}>POS: Cash only (Wallets available as Add-on)</p>
         </div>
       </div>
       {showPay && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', width: 450 }}>
+          <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', width: 400 }}>
             <h3>Payment</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem', marginBottom: '1rem' }}>
-              {['CASH', 'CARD', 'MOBILE', 'KPAY', 'AYAPAY', 'CBPAY', 'CREDIT'].map(m => (
-                <button key={m} onClick={() => setPaymentMethod(m)} style={{ padding: '0.5rem', background: paymentMethod === m ? '#2563eb' : '#e5e7eb', color: paymentMethod === m ? '#fff' : '#000', border: 'none', fontSize:'0.9rem' }}>{m}</button>
-              ))}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.5rem', marginBottom: '1rem' }}>
+              <button style={{ padding: '0.75rem', background: '#059669', color: '#fff', border: 'none' }}>CASH</button>
             </div>
-            {['KPAY', 'AYAPAY', 'CBPAY'].includes(paymentMethod) && (
-              <div style={{ marginBottom: '1rem' }}>
-                <p style={{ fontSize:'0.9rem', color:'#6b7280' }}>Upload screenshot & enter transaction ID after payment</p>
-                <input value={refNo} onChange={e=>setRefNo(e.target.value)} placeholder="Transaction/Reference No." style={{ width:'100%', padding:'0.5rem', marginBottom:'0.5rem', boxSizing:'border-box' }} />
-                <input type="file" style={{ width:'100%' }} />
-              </div>
-            )}
             <div style={{ fontSize: '1.3rem', textAlign: 'center', marginBottom: '1rem' }}>Total: {total.toFixed(2)}</div>
-            <button onClick={checkout} style={{ width: '100%', padding: '0.75rem', background: '#059669', color: '#fff', border: 'none', marginBottom: '0.5rem' }}>{['KPAY', 'AYAPAY', 'CBPAY'].includes(paymentMethod) ? 'Submit for Verification' : 'Complete Sale'}</button>
+            <button onClick={checkout} style={{ width: '100%', padding: '0.75rem', background: '#059669', color: '#fff', border: 'none', marginBottom: '0.5rem' }}>Complete Sale (Cash)</button>
             <button onClick={() => setShowPay(false)} style={{ width: '100%', padding: '0.5rem' }}>Cancel</button>
           </div>
         </div>

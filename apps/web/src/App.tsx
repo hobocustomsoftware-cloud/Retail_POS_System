@@ -38,6 +38,10 @@ const router = createBrowserRouter([
       { path: 'users', element: <Users /> },
       { path: 'settings', element: <Settings /> },
       { path: 'verification', element: <Verification /> },
+      { path: 'billing/pricing', element: <Pricing /> },
+      { path: 'billing/invoice/:invoice_no/pay', element: <Pay /> },
+      { path: 'billing/history', element: <History /> },
+      { path: 'admin/billing/verification', element: <AdminBillingVerification /> },
       { path: 'legal/terms', element: <Terms /> },
       { path: 'legal/privacy', element: <Privacy /> },
     ],
@@ -66,3 +70,7 @@ export default App
 import Terms from './pages/legal/Terms'
 import Privacy from './pages/legal/Privacy'
 import Verification from './pages/sales/Verification'
+import Pricing from './pages/billing/Pricing'
+import Pay from './pages/billing/Pay'
+import History from './pages/billing/History'
+import AdminBillingVerification from './pages/admin/billing/Verification'

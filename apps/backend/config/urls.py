@@ -14,3 +14,4 @@ urlpatterns = [
     path('api/branches/', include('branches.urls')),
     path('api/accounts/', include('accounts.urls')),
 ]
+    path('api/billing/', include('billing.urls')),

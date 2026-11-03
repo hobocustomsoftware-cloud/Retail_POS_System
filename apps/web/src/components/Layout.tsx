@@ -12,6 +12,11 @@ export default function Layout() {
           <Link to="/purchases" style={{ color: '#fff', textDecoration: 'none' }}>Purchases/GRN</Link>
           <Link to="/inventory" style={{ color: '#fff', textDecoration: 'none' }}>Inventory</Link>
           <Link to="/warranty" style={{ color: '#fff', textDecoration: 'none' }}>Warranty</Link>
+          <Link to="/verification" style={{ color: '#fff', textDecoration: 'none' }}>Payment Verification</Link>
+          <hr style={{ borderColor: '#374151' }} />
+          <Link to="/billing/pricing" style={{ color: '#fff', textDecoration: 'none' }}>Billing / Plans</Link>
+          <Link to="/billing/history" style={{ color: '#fff', textDecoration: 'none' }}>Billing History</Link>
+          <Link to="/admin/billing/verification" style={{ color: '#fff', textDecoration: 'none' }}>Admin Billing</Link>
           <hr style={{ borderColor: '#374151' }} />
           <Link to="/customers" style={{ color: '#fff', textDecoration: 'none' }}>Customers</Link>
           <Link to="/suppliers" style={{ color: '#fff', textDecoration: 'none' }}>Suppliers</Link>
