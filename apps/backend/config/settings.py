@@ -65,7 +65,11 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 CORS_ALLOW_ALL_ORIGINS = True
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
 }
-
+AUTH_USER_MODEL = 'accounts.User'
 DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE', 'STANDALONE')
 LICENSE_KEY = os.environ.get('LICENSE_KEY', '')

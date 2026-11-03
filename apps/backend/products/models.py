@@ -47,3 +47,9 @@ class ProductVariant(models.Model):
 
     def __str__(self):
         return self.sku
+
+from utils.barcode import generate_barcode, generate_sku
+
+class ProductVariant(ProductVariant):
+    class Meta:
+        proxy = True
