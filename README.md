@@ -88,3 +88,15 @@ No part of this software may be reproduced without written permission from HoBo 
 - **Example:** Registered on Jan 1 → trial ends Feb 7 (31 days Jan remaining logic) = 37 days total
 - **Leap/Short months:** Uses calendar month addition (e.g., Feb gives 28/29 days + 7 = 35/36 days total)
 - **After expiry:** Account becomes View Only until subscription is paid and approved
+
+## UI Design & Demo
+- [UI Design Detailed (Page by Page)](docs/ui-design/UI_DESIGN_DETAILED_PAGES.md)
+- [UI Design Spec](docs/ui-design/UI_DESIGN_SPEC.md)
+- [UI Design Screenshots](docs/images/)
+- [Design System](docs/ui-design/README.txt)
+
+### Pages Overview
+**System UI (Platform Admin):** Dashboard, Shops, Manual Payment Verification (Screenshot Only), Domain Requests, Subscriptions, Add-ons  
+**Shop UI:** POS (Cash Only), Products/Variants, Inventory, Purchases/GRN, Sales/Returns, Billing (Manual Screenshot), Settings  
+**Auth:** Gmail-only Shop Registration, Trial 1 Month + 7 Days (37 days), View Only after expiry  
+**Responsive:** Desktop/Tablet/Mobile
