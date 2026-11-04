@@ -1,11 +1,15 @@
 import { Link, Outlet } from 'react-router-dom'
 import SubscriptionBanner from './SubscriptionBanner'
+import NotificationBell from './NotificationBell'
 
 export default function Layout() {
   return (
     <div style={{ display: 'flex', height: '100vh', fontFamily: "'Myanmar Thuriya', system-ui" }}>
       <aside style={{ width: 240, background: '#151515', color: '#fff', padding: '1rem', overflow: 'auto' }}>
-        <h2 style={{ margin: '0 0 1rem 0' }}>Retail POS</h2>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '0 0 1rem 0' }}>
+          <h2 style={{ margin: 0 }}>Retail POS</h2>
+          <NotificationBell />
+        </div>
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
           <Link to="/pos" style={{ color: '#fff', textDecoration: 'none' }}>POS Terminal</Link>
           <Link to="/products" style={{ color: '#fff', textDecoration: 'none' }}>Products</Link>
