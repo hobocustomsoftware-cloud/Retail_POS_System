@@ -1,3 +1,4 @@
+import Backup from './pages/settings/Backup'
 import { createHashRouter, RouterProvider } from 'react-router-dom'
 import POS from './pages/pos/POS'
 import Login from './pages/auth/Login'
@@ -44,6 +45,7 @@ const router = createHashRouter([
       { path: 'admin/billing/verification', element: <AdminBillingVerification /> },
       { path: 'register-shop', element: <RegisterShop /> },
       { path: 'license/activate', element: <LicenseActivate /> },
+      { path: 'settings/backup', element: <Backup /> },
       { path: 'legal/terms', element: <Terms /> },
       { path: 'legal/privacy', element: <Privacy /> },
     ],

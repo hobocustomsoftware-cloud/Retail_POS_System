@@ -31,6 +31,7 @@ export default function Layout() {
           <Link to="/branches" style={{ color: '#fff', textDecoration: 'none' }}>Branches</Link>
           <Link to="/users" style={{ color: '#fff', textDecoration: 'none' }}>Users/Roles</Link>
           <Link to="/settings" style={{ color: '#fff', textDecoration: 'none' }}>Settings/License</Link>
+          <Link to="/settings/backup" style={{ color: '#fff', textDecoration: 'none' }}>Backup</Link>
         </nav>
       </aside>
       <main style={{ flex: 1, overflow: 'auto', background: '#f9fafb', display: 'flex', flexDirection: 'column' }}>

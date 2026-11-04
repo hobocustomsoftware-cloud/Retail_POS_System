@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'tenants',
     'licensing',
     'notifications',
+    'backups',
     'accounts',
     'branches',
     'customers',
