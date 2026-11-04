@@ -28,3 +28,26 @@ class ShopViewSet(ShopViewSet):
         shop.trial_end = timezone.now() + relativedelta(months=1) + timedelta(days=7)
         shop.subscription_status = 'TRIAL'
         shop.save()
+
+
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+
+class ShopViewSet(ShopViewSet):
+    @action(detail=False, methods=['get'])
+    def status(self, request):
+        shop = getattr(request, 'shop', None)
+        if not shop and request.user.is_authenticated:
+            shop = Shop.objects.filter(owner=request.user).first()
+        if not shop:
+            return Response({'status': 'NO_SHOP', 'is_read_only': True}, status=404)
+        from core.utils.subscription import get_shop_status
+        status = get_shop_status(shop)
+        return Response({
+            'shop_id': shop.id,
+            'shop_name': shop.shop_name,
+            'subscription_status': shop.subscription_status,
+            'trial_end': shop.trial_end,
+            **status
+        })

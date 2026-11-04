@@ -1,6 +1,9 @@
 from django.contrib import admin
-from .models import License
+from .models import LicenseActivation
 
-@admin.register(License)
-class LicenseAdmin(admin.ModelAdmin):
-    list_display = ('key', 'status', 'machine_id', 'activated_at', 'expires_at')
+
+@admin.register(LicenseActivation)
+class LicenseActivationAdmin(admin.ModelAdmin):
+    list_display = ('machine_id', 'license_key', 'is_valid', 'activated_at', 'last_checked_at')
+    search_fields = ('machine_id', 'license_key')
+    readonly_fields = ('activated_at', 'last_checked_at')

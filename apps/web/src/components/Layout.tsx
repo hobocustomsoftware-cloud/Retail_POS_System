@@ -1,4 +1,5 @@
 import { Link, Outlet } from 'react-router-dom'
+import SubscriptionBanner from './SubscriptionBanner'
 
 export default function Layout() {
   return (
@@ -28,8 +29,9 @@ export default function Layout() {
           <Link to="/settings" style={{ color: '#fff', textDecoration: 'none' }}>Settings/License</Link>
         </nav>
       </aside>
-      <main style={{ flex: 1, overflow: 'auto', background: '#f9fafb' }}>
-        <Outlet />
+      <main style={{ flex: 1, overflow: 'auto', background: '#f9fafb', display: 'flex', flexDirection: 'column' }}>
+        <SubscriptionBanner />
+        <div style={{ flex: 1, overflow: 'auto' }}><Outlet /></div>
       </main>
     </div>
   )

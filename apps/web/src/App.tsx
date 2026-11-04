@@ -43,6 +43,7 @@ const router = createBrowserRouter([
       { path: 'billing/history', element: <History /> },
       { path: 'admin/billing/verification', element: <AdminBillingVerification /> },
       { path: 'register-shop', element: <RegisterShop /> },
+      { path: 'license/activate', element: <LicenseActivate /> },
       { path: 'legal/terms', element: <Terms /> },
       { path: 'legal/privacy', element: <Privacy /> },
     ],
@@ -76,3 +77,4 @@ import Pay from './pages/billing/Pay'
 import History from './pages/billing/History'
 import AdminBillingVerification from './pages/admin/billing/Verification'
 import RegisterShop from './pages/auth/RegisterShop'
+import LicenseActivate from './pages/license/Activate'

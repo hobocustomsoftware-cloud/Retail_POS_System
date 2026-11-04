@@ -1,17 +1,21 @@
 from django.db import models
+from django.conf import settings
+from django.utils import timezone
 
-class License(models.Model):
-    STATUS_CHOICES = (
-        ('VALID', 'Valid'),
-        ('INVALID', 'Invalid'),
-        ('EXPIRED', 'Expired'),
+
+class LicenseActivation(models.Model):
+    machine_id = models.CharField(max_length=64, unique=True)
+    license_key = models.CharField(max_length=255)
+    activated_at = models.DateTimeField(auto_now_add=True)
+    is_valid = models.BooleanField(default=True)
+    activated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
-    key = models.CharField(max_length=255, unique=True)
-    machine_id = models.CharField(max_length=255, blank=True)
-    activated_at = models.DateTimeField(null=True, blank=True)
-    expires_at = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='INVALID')
-    created_at = models.DateTimeField(auto_now_add=True)
+    notes = models.TextField(blank=True)
+    last_checked_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return self.key
+        return f"{self.machine_id[:12]}... - {self.license_key[:12]}..."
