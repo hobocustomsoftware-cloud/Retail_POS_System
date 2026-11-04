@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createHashRouter, RouterProvider } from 'react-router-dom'
 import POS from './pages/pos/POS'
 import Login from './pages/auth/Login'
 import Products from './pages/products/Products'
@@ -16,7 +16,7 @@ import Branches from './pages/branches/Branches'
 import Users from './pages/users/Users'
 import Layout from './components/Layout'
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   { path: '/login', element: <Login /> },
   {
     path: '/',

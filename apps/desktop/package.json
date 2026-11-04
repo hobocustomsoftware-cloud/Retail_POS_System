@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "ELECTRON_START_URL=http://localhost:5173 electron .",
     "build": "electron-builder",
-    "dist": "electron-builder --win"
+    "dist": "electron-builder --win --publish never"
   },
   "devDependencies": {
     "electron": "^32.1.2",
@@ -15,6 +15,13 @@
     "appId": "com.hobocustomsoftware.retailpos",
     "productName": "Retail POS - HoBo Custom Software",
     "copyright": "Copyright © 2026-present HoBo Custom Software",
+    "asar": true,
+    "files": [
+      "main.js",
+      "preload.js",
+      "package.json",
+      "../web/dist/**/*"
+    ],
     "win": {
       "target": [
         "nsis"
@@ -26,15 +33,6 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true
-    },
-    "files": [
-      "main.js",
-      "package.json"
-    ]
-  },
-  "files": [
-    "main.js",
-    "preload.js",
-    "package.json"
-  ]
+    }
+  }
 }

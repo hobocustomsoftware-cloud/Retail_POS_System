@@ -2,9 +2,10 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.utils import timezone
-from .models import BillingInvoice, ManualPaymentProof
-from .serializers import BillingInvoiceSerializer, ManualPaymentProofSerializer
+from .models import BillingInvoice, ManualPaymentProof, SubscriptionPlan
+from .serializers import BillingInvoiceSerializer, ManualPaymentProofSerializer, SubscriptionPlanSerializer
 import datetime
+
 
 class BillingInvoiceViewSet(viewsets.ModelViewSet):
     queryset = BillingInvoice.objects.all().order_by('-created_at')
@@ -20,6 +21,7 @@ class BillingInvoiceViewSet(viewsets.ModelViewSet):
         )
         return Response(BillingInvoiceSerializer(inv).data)
 
+
 class ManualPaymentProofViewSet(viewsets.ModelViewSet):
     queryset = ManualPaymentProof.objects.all().order_by('-submitted_at')
     serializer_class = ManualPaymentProofSerializer
@@ -28,26 +30,31 @@ class ManualPaymentProofViewSet(viewsets.ModelViewSet):
     def approve(self, request, pk=None):
         proof = self.get_object()
         proof.status = 'APPROVED'
-        proof.reviewed_by = request.user if request.user.is_authenticated else None
         proof.reviewed_at = timezone.now()
+        proof.reviewed_by = request.user
         proof.save()
-        proof.invoice.status = 'PAID'
-        proof.invoice.save()
+        invoice = proof.invoice
+        if invoice.shop:
+            invoice.shop.subscription_status = 'ACTIVE'
+            invoice.shop.is_active = True
+            invoice.shop.save()
+        invoice.status = 'PAID'
+        invoice.save()
         return Response({'status': 'approved'})
 
     @action(detail=True, methods=['post'])
     def reject(self, request, pk=None):
         proof = self.get_object()
         proof.status = 'REJECTED'
-        proof.admin_note = request.data.get('note','')
-        proof.reviewed_by = request.user if request.user.is_authenticated else None
         proof.reviewed_at = timezone.now()
+        proof.reviewed_by = request.user
+        proof.admin_note = request.data.get('note', '')
         proof.save()
-        proof.invoice.status = 'REJECTED'
-        proof.invoice.save()
+        invoice = proof.invoice
+        invoice.status = 'REJECTED'
+        invoice.save()
         return Response({'status': 'rejected'})
-from .models import SubscriptionPlan
-from .serializers import SubscriptionPlanSerializer
+
 
 class SubscriptionPlanViewSet(viewsets.ModelViewSet):
     queryset = SubscriptionPlan.objects.all()
