@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "Retail POS - HoBo Custom Software",
+    "slug": "retail-pos-hobo",
+    "version": "1.0.0",
+    "orientation": "default",
+    "scheme": "retailpos",
+    "platforms": ["ios", "android"],
+    "plugins": ["expo-router", "expo-camera"],
+    "android": {
+      "package": "com.hobocustomsoftware.retailpos"
+    },
+    "ios": {
+      "bundleIdentifier": "com.hobocustomsoftware.retailpos"
+    }
+  }
+}

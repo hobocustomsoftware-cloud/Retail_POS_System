@@ -1,0 +1,13 @@
+# .gitignore
+node_modules
+__pycache__
+*.pyc
+db.sqlite3
+.env
+dist
+build
+.next
+.expo
+.DS_Store
+staticfiles
+*.log

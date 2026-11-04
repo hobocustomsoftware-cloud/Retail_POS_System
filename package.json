@@ -1,0 +1,22 @@
+{
+  "name": "pos-system",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "docker:standalone": "docker compose -f docker/docker-compose.standalone.yml up --build",
+    "docker:saas": "docker compose -f docker/docker-compose.multi-tenant.yml up --build"
+  },
+  "devDependencies": {
+    "turbo": "^2.1.1",
+    "typescript": "^5.6.2"
+  },
+  "packageManager": "npm@10.8.2"
+}

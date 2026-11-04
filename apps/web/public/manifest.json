@@ -1,0 +1,9 @@
+{
+  "name": "Retail POS - HoBo Custom Software",
+  "short_name": "Retail POS",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1f2937",
+  "description": "Retail POS by HoBo Custom Software"
+}
