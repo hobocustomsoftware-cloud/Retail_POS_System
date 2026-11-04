@@ -1,1 +1,1 @@
-default_app_config = None
+default_app_config = 'licensing.apps.LicensingConfig'

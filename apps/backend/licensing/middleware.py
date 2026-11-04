@@ -9,6 +9,9 @@ class LicenseCheckMiddleware(MiddlewareMixin):
         if getattr(settings, 'DEPLOYMENT_MODE', 'STANDALONE') != 'STANDALONE':
             return None
 
+        if request.method == 'OPTIONS':
+            return None
+
         path = request.path_info or ''
         # Allow license API and static files
         if path.startswith('/api/licensing/'):

@@ -6,6 +6,8 @@ from .models import Shop
 
 class TenantMiddleware(MiddlewareMixin):
     def process_request(self, request):
+        if request.method == 'OPTIONS':
+            return None
         request.tenant_id = None
         request.shop = None
         
@@ -23,6 +25,8 @@ class SubscriptionCheckMiddleware(MiddlewareMixin):
     MUTATING_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE']
     
     def process_request(self, request):
+        if request.method == 'OPTIONS':
+            return None
         # Skip for safe methods and certain paths
         if request.method not in self.MUTATING_METHODS:
             return None
@@ -45,7 +49,6 @@ class SubscriptionCheckMiddleware(MiddlewareMixin):
             return None
         
         # Check subscription status
-        from django.utils import timezone
         from core.utils.subscription import get_shop_status
         status = get_shop_status(shop)
         if status.get('is_read_only'):
