@@ -4,6 +4,9 @@ import NotificationBell from './NotificationBell'
 import { LayoutDashboard, ShoppingCart, Package, FileText, Boxes, Shield, Users, Truck, Tag, Layers, GitBranch, UserCog, Settings, Receipt, CreditCard, FileCheck, Bell, Database } from 'lucide-react'
 
 const navItems = [
+  { section: 'Overview', items: [
+    { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+  ]},
   { section: 'Sales', items: [
     { to: '/pos', icon: ShoppingCart, label: 'POS Terminal' },
     { to: '/sales', icon: Receipt, label: 'Sales History' },

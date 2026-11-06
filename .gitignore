@@ -11,3 +11,6 @@ build
 .DS_Store
 staticfiles
 *.log
+backups_storage/
+media/
+*.sqlite3

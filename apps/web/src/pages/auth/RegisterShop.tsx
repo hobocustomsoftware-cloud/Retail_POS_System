@@ -1,17 +1,52 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import api from '../../api/axios'
+import Card from '../../components/ui/Card'
+import Input from '../../components/ui/Input'
+import Button from '../../components/ui/Button'
 
 export default function RegisterShop() {
-  const [email, setEmail] = useState('')
-  const [shop, setShop] = useState({shop_name:'', address:'', phone:'', email:''})
-  const googleLogin = async () => {
-    const res = await api.post('/api/accounts/google-register-shop/', {email: shop.email || email})
-    alert('Login/Signup with Gmail: ' + res.data.email)
-  }
-  const createShop = async (e:any) => {
+  const [shop, setShop] = useState({ shop_name: '', address: '', phone: '', email: '' })
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await api.post('/api/tenants/shops/', shop)
-    alert('Shop created! Trial: 7 days free. After 7 days view-only until subscription.')
+    setLoading(true)
+    try {
+      await api.post('/api/tenants/shops/', shop)
+      alert('Shop created! Trial: 1 month + 7 days (37 days). View Only after expiry until subscription approved.')
+      navigate('/login')
+    } catch (err: any) {
+      alert(err.response?.data?.detail || 'Failed to create shop')
+    }
+    setLoading(false)
   }
-  return <div style={{padding:'2rem',maxWidth:600}}><h1>ဆိုင်အသစ်ဖွင့်ရန် (Owner - Gmail Only)</h1><div style={{background:'#fff',padding:'1rem',marginBottom:'1rem'}}><input placeholder='Gmail address' value={email} onChange={e=>setEmail(e.target.value)} style={{width:'100%',padding:'0.5rem',marginBottom:'0.5rem'}}/><button onClick={googleLogin}>Gmail ဖြင့် ဝင်ရောက်/စာရင်းသွင်း</button><p style={{fontSize:'0.8rem',color:'#6b7280'}}>Gmail နှင့်သာ ဝင်ရောက်ခွင့်ရှိသည်။ Password reset မလိုအပ်ပါ။</p></div><form onSubmit={createShop} style={{background:'#fff',padding:'1rem'}}><input required placeholder='ဆိုင်အမည် *' onChange={e=>setShop({...shop,shop_name:e.target.value})} style={{width:'100%',padding:'0.5rem',marginBottom:'0.5rem'}}/><textarea required placeholder='လိပ်စာ အပြည့်အစုံ *' onChange={e=>setShop({...shop,address:e.target.value})} style={{width:'100%',padding:'0.5rem',marginBottom:'0.5rem'}}/><input required placeholder='ဖုန်းနံပါတ် *' onChange={e=>setShop({...shop,phone:e.target.value})} style={{width:'100%',padding:'0.5rem',marginBottom:'0.5rem'}}/><input required type='email' placeholder='ဆိုင်အီးမေးလ် *' onChange={e=>setShop({...shop,email:e.target.value})} style={{width:'100%',padding:'0.5rem',marginBottom:'0.5rem'}}/><button type='submit'>ဆိုင်ဖွင့်မည် (Trial 7 ရက်)</button></form></div>
+
+  return (
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--color-bg)', padding: '1rem' }}>
+      <Card style={{ width: '100%', maxWidth: 520 }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>Register Your Shop</h1>
+        <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>Gmail-only owner registration. Trial: 37 days (1 month + 7 days).</p>
+        <form onSubmit={handleSubmit}>
+          <Input label="Shop Name *" value={shop.shop_name} onChange={e => setShop({ ...shop, shop_name: e.target.value })} required />
+          <Input label="Shop Email (Gmail) *" type="email" value={shop.email} onChange={e => setShop({ ...shop, email: e.target.value })} required />
+          <Input label="Phone Number *" value={shop.phone} onChange={e => setShop({ ...shop, phone: e.target.value })} required />
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.375rem', fontSize: '0.875rem', fontWeight: 500, color: 'var(--color-text-secondary)' }}>Full Address *</label>
+            <textarea
+              required
+              value={shop.address}
+              onChange={e => setShop({ ...shop, address: e.target.value })}
+              rows={3}
+              style={{ width: '100%', padding: '0.625rem 0.875rem', fontSize: '0.875rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', outline: 'none', fontFamily: 'var(--font-sans)' }}
+            />
+          </div>
+          <Button type="submit" variant="primary" fullWidth disabled={loading}>
+            {loading ? 'Creating...' : 'Create Shop & Start Trial'}
+          </Button>
+        </form>
+      </Card>
+    </div>
+  )
 }

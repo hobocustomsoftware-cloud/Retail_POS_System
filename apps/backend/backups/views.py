@@ -1,4 +1,5 @@
 from rest_framework import viewsets, status
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.utils import timezone
@@ -10,6 +11,7 @@ from .utils import create_system_backup, create_shop_backup
 
 
 class SystemBackupViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAdminUser]
     queryset = SystemBackup.objects.all()
     serializer_class = SystemBackupSerializer
     
@@ -48,6 +50,7 @@ class SystemBackupViewSet(viewsets.ModelViewSet):
 
 
 class ShopBackupViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = ShopBackup.objects.all()
     serializer_class = ShopBackupSerializer
     
